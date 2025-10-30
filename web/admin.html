@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TaskPesa Admin</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 20px; }
+    .row { margin-bottom: 12px; }
+    .card { border: 1px solid #ddd; padding: 12px; border-radius: 8px; margin-bottom: 16px; }
+    button, input, select { padding: 8px; margin-right: 8px; }
+    nav button { margin-right: 8px; }
+    pre { background: #f6f6f6; padding: 10px; border-radius: 6px; overflow: auto; }
+    .hidden { display:none; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h1>TaskPesa Admin Dashboard</h1>
+
+  <div class="card">
+    <div class="row">
+      <input id="adminKey" placeholder="x-admin-key" />
+      <button onclick="setAdminKey()">Set Admin Key</button>
+    </div>
+    <nav>
+      <button onclick="show('analytics')">Analytics</button>
+      <button onclick="show('users')">Users</button>
+      <button onclick="show('deposits')">Deposits</button>
+      <button onclick="show('withdrawals')">Withdrawals</button>
+      <button onclick="show('tasks')">Tasks</button>
+      <button onclick="show('settings')">Settings</button>
+      <button onclick="show('logs')">Logs</button>
+    </nav>
+  </div>
+
+  <section id="analytics" class="card">
+    <h3>Analytics</h3>
+    <div class="row">
+      <button onclick="loadAnalytics()">Refresh</button>
+    </div>
+    <canvas id="chart1" height="120"></canvas>
+    <pre id="analyticsOut"></pre>
+  </section>
+
+  <section id="users" class="card hidden">
+    <h3>Users</h3>
+    <div class="row">
+      <input id="fUserPhone" placeholder="Phone contains" />
+      <button onclick="loadUsers()">Filter</button>
+    </div>
+    <pre id="usersOut"></pre>
+  </section>
+
+  <section id="deposits" class="card hidden">
+    <h3>Deposits</h3>
+    <div class="row">
+      <select id="fDepositStatus"><option value="">All</option><option>pending</option><option>verified</option><option>used</option><option>rejected</option></select>
+      <input id="fDepositUserId" type="number" placeholder="User ID" />
+      <button onclick="loadDepositsAdmin()">Filter</button>
+    </div>
+    <div id="depositsList"></div>
+  </section>
+
+  <section id="withdrawals" class="card hidden">
+    <h3>Withdrawals</h3>
+    <div class="row">
+      <select id="fWStatus"><option value="">All</option><option>pending</option><option>approved</option><option>rejected</option></select>
+      <input id="fWUserId" type="number" placeholder="User ID" />
+      <button onclick="loadWithdrawals()">Filter</button>
+    </div>
+    <div id="withdrawalsList"></div>
+  </section>
+
+  <section id="tasks" class="card hidden">
+    <h3>Tasks</h3>
+    <div class="row">
+      <input id="tTitle" placeholder="Title" />
+      <input id="tDesc" placeholder="Description" />
+      <select id="tType">
+        <option value="basic">basic</option>
+        <option value="standard">standard</option>
+        <option value="premium">premium</option>
+        <option value="bonus">bonus</option>
+      </select>
+      <input id="tReward" type="number" placeholder="Reward KES" />
+      <input id="tTTL" type="number" placeholder="Time limit sec" />
+      <label><input id="tActive" type="checkbox" checked /> Active</label>
+      <button onclick="createTask()">Create</button>
+    </div>
+    <div class="row">
+      <select id="fTaskType"><option value="">All</option><option>basic</option><option>standard</option><option>premium</option><option>bonus</option></select>
+      <button onclick="loadTasks()">Filter</button>
+      <button onclick="generateDaily()">Generate Daily Pool</button>
+    </div>
+    <pre id="tasksOut"></pre>
+  </section>
+
+  <section id="settings" class="card hidden">
+    <h3>Settings</h3>
+    <button onclick="loadSettings()">Refresh</button>
+    <div class="row">
+      <label>Withdrawal Min KES <input id="sMinKes" type="number" /></label>
+      <label>Withdrawal Max KES <input id="sMaxKes" type="number" /></label>
+      <label>Approval Mode
+        <select id="sApprovalMode">
+          <option value="manual">manual</option>
+          <option value="auto">auto</option>
+        </select>
+      </label>
+    </div>
+    <div class="row">
+      <b>Commission Tiers</b> (min, max, percent)
+      <div id="tiers"></div>
+      <button onclick="addTier()">Add Tier</button>
+    </div>
+    <div class="row">
+      <button onclick="saveSettings()">Save</button>
+    </div>
+
+    <div class="row">
+      <h3>Bonuses & Referrals</h3>
+    </div>
+    <div class="row">
+      <button onclick="runLoyaltyBonus()">Run Loyalty Bonus</button>
+      <button onclick="loadAdminReferrals()">View Referral Stats</button>
+    </div>
+    <pre id="referralsAdminOut"></pre>
+
+    <pre id="settingsOut"></pre>
+  </section>
+
+  <section id="logs" class="card hidden">
+    <h3>Logs</h3>
+    <div class="row">
+      <button onclick="loadAdminLedgers()">Load Ledgers (first 200)</button>
+      <button onclick="loadAdminAudits()">Load Admin Audits (first 200)</button>
+    </div>
+    <pre id="ledgersAdminOut"></pre>
+    <pre id="auditsAdminOut"></pre>
+  </section>
+
+  <script src="./admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+version: '3.9'
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: taskpesa-db
+    environment:
+      POSTGRES_USER: taskpesa
+      POSTGRES_PASSWORD: taskpesa
+      POSTGRES_DB: taskpesa
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    container_name: taskpesa-redis
+    ports:
+      - "6379:6379"
+
+  api:
+    build: ./server
+    container_name: taskpesa-api
+    depends_on:
+      - db
+      - redis
+    environment:
+      PORT: 8080
+      DATABASE_URL: postgres://taskpesa:taskpesa@db:5432/taskpesa
+      JWT_SECRET: changeme
+      ADMIN_KEY: changeme_admin
+      CORS_ORIGIN: "*"
+      REDIS_URL: redis://redis:6379
+      SMS_PROVIDER: none
+      SMS_FROM: TaskPesa
+    ports:
+      - "8080:8080"
+
+  web:
+    image: nginx:alpine
+    container_name: taskpesa-web
+    depends_on:
+      - api
+    volumes:
+      - ./web:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "8081:80"
+
+volumes:
+  db_data:

@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TaskPesa Kenya</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 20px; }
+    .card { border: 1px solid #ddd; padding: 16px; border-radius: 8px; margin-bottom: 16px; }
+    input, button, select { padding: 8px; margin-right: 8px; }
+    .row { margin-bottom: 12px; }
+    .hidden { display: none; }
+    code { background: #f6f6f6; padding: 2px 4px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <div class="row">
+    <label>Language
+      <select id="lang" onchange="setLang(this.value)">
+        <option value="en">English</option>
+        <option value="sw">Kiswahili</option>
+      </select>
+    </label>
+  </div>
+  <h1 id="title">TaskPesa Kenya — Earn Daily, Withdraw Weekly</h1>
+
+  <div class="card">
+    <h3 id="authTitle">Auth (Phone)</h3>
+    <div class="row">
+      <input id="phone" placeholder="phone (e.g., 07XXXXXXXX)" />
+      <input id="password" type="password" placeholder="password" />
+      <button onclick="register()" id="btnRegister">Register</button>
+      <button onclick="login()" id="btnLogin">Login</button>
+    </div>
+    <div>Token: <code id="tokenPreview"></code></div>
+  </div>
+
+  <div class="card">
+    <h3 id="profileTitle">My Profile</h3>
+    <div id="me"></div>
+    <div class="row">
+      <input id="avatarUrl" placeholder="Avatar URL" />
+      <button onclick="saveAvatar()" id="btnSaveAvatar">Save Avatar</button>
+    </div>
+    <div class="row">
+      <input id="oldPwd" type="password" placeholder="Old password" />
+      <input id="newPwd" type="password" placeholder="New password" />
+      <button onclick="changePassword()" id="btnChangePwd">Change Password</button>
+    </div>
+    <div class="row">
+      <button onclick="deleteAccount()" style="background:#f33;color:#fff" id="btnDelete">Delete Account</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Referrals</h3>
+    <div class="row">
+      <button onclick="loadReferrals()">Refresh</button>
+      <span id="referralCodeWrap"></span>
+    </div>
+    <div id="referralsList"></div>
+  </div>
+
+  <div class="card">
+    <h3>Deposit via M-Pesa (Manual)</h3>
+    <div class="row">
+      Pay to Buy Goods Till: <b>4567052</b>
+    </div>
+    <div class="row">
+      <input id="depositCode" placeholder="M-Pesa code (e.g., QFG12...)" />
+      <input id="depositAmount" type="number" placeholder="Amount KES" />
+      <input id="depositProof" placeholder="Proof URL (optional)" />
+      <button onclick="submitDeposit()">Submit Deposit</button>
+      <button onclick="loadDeposits()">Refresh</button>
+    </div>
+    <pre id="deposits"></pre>
+  </div>
+
+  <div class="card">
+    <h3>Packages</h3>
+    <div class="row">
+      <button onclick="loadPackages()">Refresh Packages</button>
+      <select id="pkgSelect"></select>
+      <select id="depositSelect"></select>
+      <button onclick="purchase()">Activate using verified deposit</button>
+    </div>
+    <div id="packages"></div>
+  </div>
+
+  <div class="card">
+    <h3>Today Tasks</h3>
+    <div class="row">
+      <button onclick="loadTodayTasks()">Load Today</button>
+    </div>
+    <div id="tasks"></div>
+  </div>
+
+  <div class="card">
+    <h3>Wallet History</h3>
+    <div class="row">
+      <button onclick="loadLedger()">Refresh</button>
+    </div>
+    <pre id="ledger"></pre>
+  </div>
+
+  <div class="card">
+    <h3>Withdraw</h3>
+    <div class="row">
+      <input id="withdrawAmount" type="number" placeholder="Amount KES (Fri only, 750–10000)" />
+      <button onclick="requestWithdraw()">Request</button>
+    </div>
+    <div id="withdrawResult"></div>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
