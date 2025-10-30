@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # TaskPesa Kenya — Render Deployment (Web + API)
 
 MVP using Node/Express API + PostgreSQL (Render) and a lightweight browser client.
@@ -22,3 +23,6 @@ MVP using Node/Express API + PostgreSQL (Render) and a lightweight browser clien
 
 ## APK
 Later, wrap `web/` using Capacitor to produce an APK.
+=======
+# TaskPezaa
+>>>>>>> 05b9202c09f4f2d21520c5525403af7a41903bf5
