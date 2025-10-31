@@ -1,4 +1,4 @@
-import 'dotenv/config';
+﻿import 'dotenv/config';
 import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
@@ -15,7 +15,6 @@ const __dirname  = path.dirname(__filename);
 const app = express();
 app.set('trust proxy', 1);
 
-// ---------- SECURITY ----------
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(express.json({ limit: '200kb' }));
 app.use(cookieParser());
@@ -24,12 +23,9 @@ app.use(cors({
   credentials: true,
 }));
 
-// ---------- SERVE FRONTEND ----------
-const clientPath = path.join(__dirname, '../web/dist');   // Vite
-// const clientPath = path.join(__dirname, '../web/build'); // CRA
+const clientPath = path.join(__dirname, '../../web/dist');
 app.use(express.static(clientPath));
 
-// ---------- CSRF ----------
 app.use((req, res, next) => {
   if (!req.cookies.tp_csrf) {
     const token = crypto.randomBytes(16).toString('hex');
@@ -38,7 +34,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// ---------- HEALTH ----------
 app.get('/health', async (_req, res) => {
   try {
     const { rows } = await pool.query('select 1 as ok');
@@ -48,13 +43,11 @@ app.get('/health', async (_req, res) => {
   }
 });
 
-// ---------- API ----------
 app.use('/', router);
 
-// ---------- SPA FALLBACK ----------
 app.get('*', (req, res) => {
   res.sendFile(path.join(clientPath, 'index.html'));
 });
 
 const port = Number(process.env.PORT || 8080);
-app.listen(port, () => console.log(`TaskPesa API listening on :${port}`));
+app.listen(port, () => console.log(TaskPesa API listening on :));
