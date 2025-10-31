@@ -1,5 +1,5 @@
-import express from 'express';
-import bcrypt from 'bcrypt';
+﻿import express from 'express';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { pool } from './pg.js';
 import { rateLimit } from './ratelimit.js';
@@ -418,7 +418,7 @@ router.post('/admin/deposits/:id/reject', admin, async (req, res) => {
   res.json(rows[0]);
 });
 
-// Purchases — require verified deposit; do not use balance
+// Purchases â€” require verified deposit; do not use balance
 router.post('/purchase', auth, async (req, res) => {
   const { packageId, depositId } = req.body;
   if (!packageId || !depositId) return res.status(400).json({ error: 'missing_fields' });
@@ -494,7 +494,7 @@ router.post('/admin/tasks/generate-daily', admin, async (_req, res) => {
     const types = ['basic','standard','premium','bonus'];
     const type = types[i % types.length];
     const reward = type === 'basic' ? 10 : type === 'standard' ? 20 : type === 'premium' ? 50 : 100;
-    seed.push({ t: `Task ${i+1} — ${type}`, d: 'Kenyan-relevant virtual task', type, r: reward });
+    seed.push({ t: `Task ${i+1} â€” ${type}`, d: 'Kenyan-relevant virtual task', type, r: reward });
   }
   const client = await pool.connect();
   try {
@@ -793,3 +793,4 @@ router.get('/admin/audits', admin, async (req, res) => {
   const { rows } = await pool.query('select * from admin_audit_logs order by id desc limit $1 offset $2', [limit, offset]);
   res.json(rows);
 });
+
