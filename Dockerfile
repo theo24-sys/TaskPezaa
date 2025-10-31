@@ -2,15 +2,20 @@
 FROM node:20-alpine AS base
 WORKDIR /app
 
+# Copy package files
 COPY package*.json ./
 COPY web/package*.json ./web/
 
-RUN npm ci && cd web && npm ci
+# Install deps (use `install` since lockfiles are missing)
+RUN npm install && cd web && npm install
 
+# Copy source
 COPY . .
 
+# Build frontend
 RUN cd web && npm run build
 
+# Production
 FROM node:20-alpine AS production
 WORKDIR /app
 COPY --from=base /app /app
