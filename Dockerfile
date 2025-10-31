@@ -6,7 +6,7 @@ WORKDIR /app
 COPY package*.json ./
 COPY web/package*.json ./web/
 
-# Install deps (use `install` since lockfiles are missing)
+# Install deps
 RUN npm install && cd web && npm install
 
 # Copy source
@@ -19,8 +19,8 @@ RUN cd web && npm run build
 FROM node:20-alpine AS production
 WORKDIR /app
 COPY --from=base /app /app
-RUN npm ci --production && rm -rf web/node_modules
+RUN npm install --production && rm -rf web/node_modules
 
 ENV NODE_ENV=production
 EXPOSE 8080
-CMD ["node","server/src/index.js"]
+CMD ["node", "server/src/index.js"]
