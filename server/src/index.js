@@ -15,6 +15,27 @@ const __dirname = path.dirname(__filename);
 const app = express();
 app.set('trust proxy', 1);
 
+// --- Auto-create Admin User ---
+(async () => {
+  try {
+    const adminUsername = 'Banjo';
+    const adminPasswordHash = '$2b$10$bzUpQVgre5hCb0mNOcUPAuTWZh.AoNj5SZk45mDjZMaC/2kCxt1Fm'; // ← PASTE YOUR HASH HERE
+
+    const { rows } = await pool.query('SELECT 1 FROM users WHERE username = $1', [adminUsername]);
+    if (rows.length === 0) {
+      await pool.query(
+        'INSERT INTO users (username, password_hash, role) VALUES ($1, $2, $3)',
+        [adminUsername, adminPasswordHash, 'admin']
+      );
+      console.log('Admin user created: Banjo');
+    } else {
+      console.log('Admin already exists: Banjo');
+    }
+  } catch (err) {
+    console.error('Failed to create admin:', err.message);
+  }
+})();
+
 // --- Middleware setup ---
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(express.json({ limit: '200kb' }));
